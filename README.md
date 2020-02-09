@@ -42,7 +42,9 @@ ________________________________________________________________________________
 Iteraciones de desarrollo
 __________________________________________________________________________________________________________________
 - creación aplicativo spring boot
-- 
+- creación service con método GET -> Calculate
+- creación controller que se encargue de la lógica de cálculo de la expresión enviada 
+
   
 __________________________________________________________________________________________________________________
 Reglas para el input expresión
