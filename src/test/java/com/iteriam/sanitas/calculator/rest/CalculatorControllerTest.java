@@ -1,52 +1,55 @@
 package com.iteriam.sanitas.calculator.rest;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.iteriam.sanitas.calculator.model.common.GeneralResponse;
 import com.iteriam.sanitas.calculator.service.OperationService;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest
+@ExtendWith(MockitoExtension.class)
 public class CalculatorControllerTest {
 	
-	@Autowired
-	protected MockMvc mockMvc;
+    @InjectMocks
+    private CalculatorController controller;
+    
+    @Mock
+    private OperationService operationService;
+    
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @BeforeEach
+    public void setUp() {
+    	Mockito.reset(operationService);    	
+    }
 
-	@MockBean
-	protected OperationService operationService;
+    @Test
+    public void testSum() {
+    	String expresion = "1+1";
+    	Double result = (double) 2;
+        GeneralResponse<Double> response = new GeneralResponse<Double>("OK", result);
+    	
+        Mockito.when(operationService.calculate(expresion)).thenReturn(response);
+        assertEquals(controller.calculate(expresion).getResult(), new Double(result));
+    }
 
-	@Before
-	public void setUp() {
-		Mockito.reset(operationService);
-	}
+    @Test
+    public void testSubtration() {
+    	String expresion = "2-1";
+    	Double result = (double) 1;
+        GeneralResponse<Double> response = new GeneralResponse<Double>("OK", result);
+    	
+        Mockito.when(operationService.calculate(expresion)).thenReturn(response);
+        assertEquals(controller.calculate(expresion).getResult(), new Double(result));        
+    }	
 
-	@Test
-	public void shouldReturnFoundPost() throws Exception {
-		// given
-		String expresion = "0";
-		Double result = new Double(0.0);
-
-		// when
-		when(operationService.calculate(expresion)).thenReturn(result);
-
-		// then
-		mockMvc.perform(get("/calculate/0").accept(MediaType.ALL))
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(content().string("0.0"));
-
-	}
 }

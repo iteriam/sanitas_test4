@@ -1,8 +1,21 @@
 package com.iteriam.sanitas.calculator.model.common;
 
-public class GeneralResponse {
+import lombok.Getter;
+import lombok.Setter;
+
+public class GeneralResponse<T> {
 	
+	@Setter
+	@Getter
 	String message;
-	double result;
+	
+	@Setter
+	@Getter
+	T result;
+	
+	public GeneralResponse(String message, T result) {
+		this.message = message;
+		this.result = result;
+	}
 
 }

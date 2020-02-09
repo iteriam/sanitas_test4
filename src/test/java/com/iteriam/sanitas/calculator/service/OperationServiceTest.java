@@ -1,17 +1,14 @@
 package com.iteriam.sanitas.calculator.service;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+import com.iteriam.sanitas.calculator.model.common.GeneralResponse;
+
+@SpringBootTest(classes=OperationService.class)
 public class OperationServiceTest {
 	
 	@Autowired
@@ -21,26 +18,18 @@ public class OperationServiceTest {
 	public void shouldReturnNotNull() {
 		String expresion = "0";
 		double result = 0.0;
-
-		assertNotNull("Calculate shouldn't be null", expresion);
-		assertThat(operationService.calculate(expresion), equalTo(result));
-	}
-
-	@Test
-	public void shouldReturnNullForNullExpresion() {
-//		String expresion = "0";
-//		String result = "0";
-//
-//		assertNotNull("Calculate shouldn't be null", expresion);
-//		assertThat(operationService.calculate(expresion), equalTo(result));	
+		
+		GeneralResponse<Double> response = operationService.calculate(expresion);
+		assertEquals(result, response.getResult());
 	}
 	
 	@Test
 	public void shouldReturnResultForBasicSum() {
 		String expresion = "1+1";
 		double result = 2.0;
-
-		assertThat(operationService.calculate(expresion), equalTo(result));
+		
+		GeneralResponse<Double> response = operationService.calculate(expresion);
+		assertEquals(result, response.getResult());		
 	}
 	
 	@Test
@@ -48,15 +37,17 @@ public class OperationServiceTest {
 		String expresion = "2-1";
 		double result = 1.0;
 
-		assertThat(operationService.calculate(expresion), equalTo(result));
+		GeneralResponse<Double> response = operationService.calculate(expresion);
+		assertEquals(result, response.getResult());
 	}
 	
 	@Test
 	public void shouldReturnResultForBasicDecimalSubtration() {
 		String expresion = "2.1-1";
 		double result = 1.1;
-
-		assertThat(operationService.calculate(expresion), equalTo(result));
+		
+		GeneralResponse<Double> response = operationService.calculate(expresion);
+		assertEquals(result, response.getResult());
 	}
 
 }
