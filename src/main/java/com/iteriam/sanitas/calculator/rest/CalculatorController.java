@@ -36,7 +36,7 @@ public class CalculatorController {
 	public GeneralResponse<Double> calculate(@PathVariable String expresion) {
 		GeneralResponse<Double> result = operationService.calculate(expresion);
 		trace.trace(TraceBuilder.createTrace("expresión: {"+expresion+"}, response:", result));
-		return operationService.calculate(expresion);
+		return result;
 	}
 	
 	
