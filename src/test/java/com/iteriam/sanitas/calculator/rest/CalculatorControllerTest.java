@@ -1,6 +1,6 @@
 package com.iteriam.sanitas.calculator.rest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,10 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
 
-import com.iteriam.sanitas.calculator.model.common.GeneralResponse;
+import com.iteriam.sanitas.calculator.factory.ExpresionFactory;
+import com.iteriam.sanitas.calculator.model.ExpresionTest;
 import com.iteriam.sanitas.calculator.service.OperationService;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,8 +23,8 @@ public class CalculatorControllerTest {
     @Mock
     private OperationService operationService;
     
-    @Autowired
-    private MockMvc mockMvc;
+//    @Autowired
+//    private MockMvc mockMvc;
     
     @BeforeEach
     public void setUp() {
@@ -33,23 +32,17 @@ public class CalculatorControllerTest {
     }
 
     @Test
-    public void testSum() {
-    	String expresion = "1+1";
-    	Double result = (double) 2;
-        GeneralResponse<Double> response = new GeneralResponse<Double>("OK", result);
-    	
-        Mockito.when(operationService.calculate(expresion)).thenReturn(response);
-        assertEquals(controller.calculate(expresion).getResult(), new Double(result));
+    public void testOperationSum() {    	
+    	ExpresionTest expresionTest = ExpresionFactory.getBasicSumExpresion();
+        Mockito.when(operationService.calculate(expresionTest.getExpresion())).thenReturn(expresionTest.getResponse());
+        assertEquals(expresionTest.getResponse().getResult(), operationService.calculate(expresionTest.getExpresion()).getResult());
     }
 
     @Test
-    public void testSubtration() {
-    	String expresion = "2-1";
-    	Double result = (double) 1;
-        GeneralResponse<Double> response = new GeneralResponse<Double>("OK", result);
-    	
-        Mockito.when(operationService.calculate(expresion)).thenReturn(response);
-        assertEquals(controller.calculate(expresion).getResult(), new Double(result));        
+    public void testOperationSubtration() {    	
+    	ExpresionTest expresionTest = ExpresionFactory.getBasicSubstractionExpresion();    	
+        Mockito.when(operationService.calculate(expresionTest.getExpresion())).thenReturn(expresionTest.getResponse());
+        assertEquals(expresionTest.getResponse().getResult(), operationService.calculate(expresionTest.getExpresion()).getResult());
     }	
 
 }
